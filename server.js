@@ -32,14 +32,6 @@ const gernes = [
     }
 ];
 
-function validateSchema(gerne){
-    const schema = Joi.object({
-        name: Joi.string().min(3).required()
-    });
-
-    return schema.validate(gerne);
-}
-
 // HOME Page of VIDLY
 vidly.get('/', (request,response)=>{
     return response.send("Welcome to VIDLY!!");
@@ -66,9 +58,9 @@ vidly.post('/api/gernes/', (request, response)=>{
 
     // Step 1
     // Check if the gerne object passed in body is valid
-    const validateSchema = valdateSchema(request.body);
-    if(validateSchema.error){
-        return response.status(400).send(validateSchema.error.details[0].message);
+    const validSchema = validateSchema(request.body);
+    if(validSchema.error){
+        return response.status(400).send(validSchema.error.details[0].message);
     }
 
     // Step 2
@@ -121,6 +113,15 @@ vidly.delete('/api/gernes/:id', (request, response)=>{
     gernes.splice(index, 1);
     return response.send(gernes);
 });
+
+function validateSchema(gerne){
+    const schema = Joi.object({
+        name: Joi.string().min(3).required()
+    });
+
+    return schema.validate(gerne);
+}
+
 
 // Server is listening on PORT Number : port
 vidly.listen(port,()=>{
