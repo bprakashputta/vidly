@@ -1,4 +1,5 @@
 const config = require('config');
+const vidlyDebugger = require('debug')('server:vidly')
 const Joi = require('joi');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -16,11 +17,14 @@ vidly.use(express.static('public'));
 vidly.use(helmet());
 vidly.use(logger);
 
+
 // Environment Dependent Middleware
 console.log(`Environment Type: ${vidly.get('env')}`);
 if(vidly.get('env') === 'development'){
     vidly.use(morgan('tiny'));
-    console.log('Morgan enabled...!');
+    // console.log('Morgan enabled...!');
+    vidlyDebugger('Morgan enabled...!');
+    // startupDebuggrer()
 }
 
 // Environment Conditions
@@ -28,8 +32,9 @@ const port = process.env.PORT || 3000;
 
 
 // Configuration Variables
-console.log(`Environment Name: ${config.get('name')}`);
-console.log(`Application Mail Server: ${config.get('mail.host')}`);
+// console.log(`Environment Name: ${config.get('name')}`);
+// console.log(`Application Mail Server: ${config.get('mail.host')}`);
+// console.log(`Application Password: ${config.get('mail.password')}`);
 
 
 vidly.use(function (request, response, next) {
