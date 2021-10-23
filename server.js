@@ -1,11 +1,20 @@
 const express = require('express');
 const Joi = require('joi');
+const logger = require('./logger')
 const {request, response} = require("express");
+const {func} = require("joi");
 const vidly = express();
 
 // Environment Conditions
 vidly.use(express.json());
 const port = process.env.PORT || 3000;
+
+vidly.use(logger);
+
+vidly.use(function (request, response, next) {
+    console.log("Authentication");
+    next();
+});
 
 // This is Vidly Backend
 // Vidly is a movie rental service
