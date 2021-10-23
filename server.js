@@ -12,16 +12,16 @@ const {func} = require("joi");
 
 // Middlewares
 vidly.use(express.json());
-vidly.use(express.urlencoded({extended: true}));
-vidly.use(express.static('public'));
-vidly.use(helmet());
-vidly.use(logger);
+vidly.use(express.urlencoded({extended: true}));// parse url parameters to request body
+vidly.use(express.static('public'));// Serve static files like html, images, javascript to server
+vidly.use(helmet());// Secures the app by applying HTTP headers
+// vidly.use(logger);
 
 
 // Environment Dependent Middleware
 console.log(`Environment Type: ${vidly.get('env')}`);
 if(vidly.get('env') === 'development'){
-    vidly.use(morgan('tiny'));
+    vidly.use(morgan('tiny'));// HTTP request logger middleware
     // console.log('Morgan enabled...!');
     vidlyDebugger('Morgan enabled...!');
     // startupDebuggrer()
