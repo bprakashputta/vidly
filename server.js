@@ -1,15 +1,36 @@
-const express = require('express');
+const config = require('config');
 const Joi = require('joi');
-const logger = require('./logger')
+const helmet = require('helmet');
+const morgan = require('morgan');
+const logger = require('./logger');
+const express = require('express');
+const vidly = express();
 const {request, response} = require("express");
 const {func} = require("joi");
-const vidly = express();
+
+
+// Middlewares
+vidly.use(express.json());
+vidly.use(express.urlencoded({extended: true}));
+vidly.use(express.static('public'));
+vidly.use(helmet());
+vidly.use(logger);
+
+// Environment Dependent Middleware
+console.log(`Environment Type: ${vidly.get('env')}`);
+if(vidly.get('env') === 'development'){
+    vidly.use(morgan('tiny'));
+    console.log('Morgan enabled...!');
+}
 
 // Environment Conditions
-vidly.use(express.json());
 const port = process.env.PORT || 3000;
 
-vidly.use(logger);
+
+// Configuration Variables
+console.log(`Environment Name: ${config.get('name')}`);
+console.log(`Application Mail Server: ${config.get('mail.host')}`);
+
 
 vidly.use(function (request, response, next) {
     console.log("Authentication");

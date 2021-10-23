@@ -1,0 +1,6 @@
+{
+  "name": "My ViDLy App - Production Environment",
+  "mail": {
+    "host": "my-vidly-app-production-server"
+  }
+}
