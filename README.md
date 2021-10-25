@@ -6,13 +6,40 @@
     2. express.urlencoded() - converts Fields/Parameters received in Request to request.body
     3. express.static('public') - serves static files such as images, CSS files, and JavaScript files
 
-## Configurations
+    Types of Middleware
+        1. Applied on routes
+            
+            app.use(function(req, res, next)) {
+                // ...     
+                next(); 
+            }
+
+        2. Applied on routes starting with /api/admin
+            
+            app.use(‘/api/admin’, function(req, res, next)) {
+                // ...     
+                next(); 
+            }
+
+## Configurations and Environment Variables
+We can detect the environment in which our Node application is running (development, production, etc) using `process.env.NODE_ENV` and `app.get(‘env’)`.
+
 
     1. NPM RC - most popular configuration manager that we use for managing multiple environments, 
                 like different databases for development and production environments 
     
     2. NPM CONFIG - My preferred configuration manager that we use for managing multiple environments, 
                 like different databases for development and production environments
+
+Setting Environment variables on different systems as follows:-\
+   1. WINDOWS
+
+    $env:NODE_ENV="production"
+
+
+   2. UNIX/MAC/LINUX
+    
+    export process.env.NODE_ENV="production"
 
 ### Note
     While Checking config files to repository, do not write usernames, passwords, and server details
