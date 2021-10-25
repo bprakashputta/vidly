@@ -35,3 +35,38 @@
 
 This package can be used instead of console.log statement, enable or disable it depending
 development environment type
+
+
+## Template Engine
+There are many template engines, most popular among them are `pug`, `mustache`, `ejs`. We will be 
+using `pug` template engine in this project. 
+   1. Setup Template Engine in `server.js`
+   
+          vidly.set('view engine', 'pug');
+          vidly.set('views', './views');
+
+   ### PUG
+   `PUG` is a very popular template engine for parsing dynamic HTML content to the browser,
+   it's different from the other two template engines by the syntax. `PUG` has very simple 
+   HTML like syntax without tags.
+      
+         html
+            head
+               title= titleName
+            body
+               header= headerName
+               nav= navBar
+   
+   **Note:-** The equal to symbol should right beside the tag it is associated with            
+   
+
+## Database Integration
+    
+We are using `MongoDB` for this application. `NodeJs` has `MongoClient` and `Mongoose` libraries
+for integrating database and backend. 
+    
+        const MongoClient = require('mongodb').MongoClient
+
+        MongoClient.connect('mongodb://localhost:27017/animals', function(err,db){
+            if(err) throw err
+        }
