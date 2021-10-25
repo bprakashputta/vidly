@@ -9,6 +9,10 @@ const vidly = express();
 const {request, response} = require("express");
 const {func} = require("joi");
 
+// Template Engines
+app.set('view engine', 'pug');
+app.set('views', './views');
+
 
 // Middlewares
 vidly.use(express.json());
