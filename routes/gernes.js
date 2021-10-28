@@ -1,4 +1,5 @@
 const express = require('express');
+const Joi = require("joi");
 const gerneRouter = express.Router();
 
 const gernes = [
@@ -101,5 +102,12 @@ gerneRouter.delete('/:id', (request, response)=>{
     return response.send(gernes);
 });
 
+function validateSchema(gerne){
+    const schema = Joi.object({
+        name: Joi.string().min(3).required()
+    });
+
+    return schema.validate(gerne);
+}
 
 module.exports = gerneRouter;

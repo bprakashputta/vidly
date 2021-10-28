@@ -12,6 +12,7 @@ const {func} = require("joi");
 //Import all the routes
 const gernes = require('./routes/gernes');
 const home = require('./routes/home');
+const customer = require('./routes/customer')
 
 // Template Engines
 vidly.set('view engine', 'pug');
@@ -24,6 +25,7 @@ vidly.use(express.urlencoded({extended: true}));// parse url parameters to reque
 vidly.use(express.static('public'));// Serve static files like html, images, javascript to server
 vidly.use(helmet());// Secures the app by applying HTTP headers
 vidly.use('/api/gernes', gernes);
+vidly.use('/api/customer', customer);
 vidly.use('/', home);
 // vidly.use(logger);
 
@@ -54,16 +56,6 @@ vidly.use(function (request, response, next) {
 
 // This is Vidly Backend
 // Vidly is a movie rental service
-
-
-function validateSchema(gerne){
-    const schema = Joi.object({
-        name: Joi.string().min(3).required()
-    });
-
-    return schema.validate(gerne);
-}
-
 
 // Server is listening on PORT Number : port
 vidly.listen(port,()=>{
