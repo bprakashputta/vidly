@@ -10,7 +10,7 @@ const {request, response} = require("express");
 const {func} = require("joi");
 
 //Import all the routes
-const gernes = require('./routes/gernes');
+const genres = require('./routes/genre');
 const home = require('./routes/home');
 const customer = require('./routes/customer')
 
@@ -24,7 +24,7 @@ vidly.use(express.json());
 vidly.use(express.urlencoded({extended: true}));// parse url parameters to request body
 vidly.use(express.static('public'));// Serve static files like html, images, javascript to server
 vidly.use(helmet());// Secures the app by applying HTTP headers
-vidly.use('/api/gernes', gernes);
+vidly.use('/api/genres', genres);
 vidly.use('/api/customer', customer);
 vidly.use('/', home);
 // vidly.use(logger);
