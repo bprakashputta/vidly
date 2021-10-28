@@ -1,25 +1,24 @@
 const express = require('express');
 const Joi = require("joi");
 const gerneRouter = express.Router();
+const DB = require('../db/mongodb');
+const db = new DB();
 
-const gernes = [
-    {
-        id: 1,
-        name: "Action"
-    },
-    {
-        id: 2,
-        name: "Adventure"
-    },
-    {
-        id: 3,
-        name: "Comedy"
-    },
-    {
-        id: 4,
-        name: "Romance"
-    }
-];
+
+// const gernes = [
+//     {
+//         name: "Action"
+//     },
+//     {
+//         name: "Adventure"
+//     },
+//     {
+//         name: "Comedy"
+//     },
+//     {
+//         name: "Romance"
+//     }
+// ];
 
 // Implementing the CRUD operations for
 // Gerne of Movies on the Vidly Service
@@ -27,12 +26,18 @@ const gernes = [
 
 // GET METHOD to READ list of gernes
 gerneRouter.get('/',(request, response)=>{
-    response.send(gernes);
+    const gernes = db.getAllGernes();
+    console.log((gernes));
+    response.send();
 });
 
 // GET METHOD for reading particular gernes
 gerneRouter.get('/:id', (request, response)=>{
-    let gerne = gernes.find(g => g.id === parseInt(request.params.id));
+    // find gerne by id from Gernes array
+    // let gerne = gernes.find(g => g.id === parseInt(request.params.id));
+
+    // find gerne by id from database
+    let gerne = db.getGerneByID(request.params.id);
     if(!gerne){
         return response.status(400).send("The Gerne with the given ID doesn't exist");
     }

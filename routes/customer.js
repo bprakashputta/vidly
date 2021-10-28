@@ -18,7 +18,8 @@ customerRouter.get('/:id', (request, response) => {
 // });
 
 
-sendEmailToGoldSubscribers();
+// sendEmailToGoldSubscribers().then(r => console.log(r));
+
 async function sendEmailToGoldSubscribers() {
   try {
     const customer = await getCustomer(1);
