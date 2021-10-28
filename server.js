@@ -8,6 +8,13 @@ const express = require('express');
 const vidly = express();
 const {request, response} = require("express");
 const {func} = require("joi");
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/vidly')
+    .then(()=>{
+        vidlyDebugger('Connected to Vidly Database');
+    })
+    .catch(err=> vidlyDebugger(err.message));
 
 //Import all the routes
 const genres = require('./routes/genre');

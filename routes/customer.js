@@ -1,9 +1,99 @@
+const mongoose = require('mongoose');
+const customerLog = require('debug')('customer:log');
 const express = require('express');
+const {request, response} = require("express");
+const Joi = require('joi');
 const customerRouter = express.Router();
+const {Customer, validate} = require('../models/customer');
 
-customerRouter.get('/:id', (request, response) => {
+// Get list of All Customers
+customerRouter.get('', async (request, response)=>{
+  const customers = await Customer.find().sort('name');
+  response.send(customers);
+})
 
+// Get details of Customer with given ID.
+customerRouter.get('/:id', async (request, response) => {
+  const customer = await Customer.findById({_id: request.params.id});
+  if(!customer){
+    return response.status(400).send('Customer with Given ID was not found');
+  }
+
+  return response.send(customer);
 });
+
+
+
+// Add new Customer to the database
+customerRouter.post('/', async (request, response)=>{
+  // Step 1
+  // Validate the Customer Schema passed in request body
+  const validateRequest = await validate(request.body);
+  if(!validateRequest){
+    return response.status(400).send(validateRequest.error.details[0].message);
+  }
+
+  // Step 2
+  let customer;
+  try {
+    customer = await new Customer({
+      isGold: request.body.isGold,
+      name: request.body.name,
+      phone: request.body.phone
+    });
+    const result = await customer.save();
+    customerLog(result);
+  }catch (ex) {
+    customerLog(ex.message);
+  }
+
+  return response.send(customer);
+});
+
+
+// Update customer details by id
+customerRouter.put('/:id', async (request, response)=>{
+  // Step 1
+  // Validate the Customer Schema passed in request body
+  const validateRequest = await validate(request.body);
+  if(!validateRequest){
+    return response.status(400).send(validateRequest.error.details[0].message);
+  }
+
+  // Step 2
+  let customer;
+  try {
+    customer = await Customer.findByIdAndUpdate({_id: request.params.id},{
+      // Update the fields which are to be updated
+      name: request.body.name,
+      // isGold: request.body.isGold,
+      // phone: request.body.phone
+    }, {new: true});
+  }catch (ex) {
+    customerLog(ex.message);
+  }
+
+  return response.send(customer);
+});
+
+
+
+// Delete customer details by id
+customerRouter.delete('/:id', async (request, response)=>{
+  // Step 1
+  let customer;
+  try {
+    customer = await Customer.findByIdAndRemove({_id: request.params.id});
+    if(!customer){
+      return response.status(400).send('Customer with the Given ID does not exist');
+    }
+  }catch (ex) {
+    customerLog(ex.message);
+  }
+
+  return response.send(customer);
+});
+
 
 // getCustomer(1, (customer) => {
 //   console.log('Customer: ', customer);
