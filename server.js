@@ -19,7 +19,8 @@ mongoose.connect('mongodb://localhost/vidly')
 //Import all the routes
 const genres = require('./routes/genre');
 const home = require('./routes/home');
-const customer = require('./routes/customer')
+const customer = require('./routes/customer');
+const movies = require('./routes/movies');
 
 // Template Engines
 vidly.set('view engine', 'pug');
@@ -33,6 +34,7 @@ vidly.use(express.static('public'));// Serve static files like html, images, jav
 vidly.use(helmet());// Secures the app by applying HTTP headers
 vidly.use('/api/genres', genres);
 vidly.use('/api/customer', customer);
+vidly.use('/api/movies', movies);
 vidly.use('/', home);
 // vidly.use(logger);
 
