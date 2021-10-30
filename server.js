@@ -1,6 +1,8 @@
+const Joi = require('@hapi/joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const config = require('config');
 const vidlyDebugger = require('debug')('server:vidly')
-const Joi = require('joi');
+// const Joi = require('joi');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./middleware/logger');
