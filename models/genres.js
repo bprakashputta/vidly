@@ -11,7 +11,7 @@ const genreSchema = new mongoose.Schema({
 });
 const Genre = mongoose.model('Genre', genreSchema);
 
-console.log("Helo: ", Genre.schema);
+// console.log("Helo: ", Genre.schema);
 
 function validateSchema(genre){
     const schema = Joi.object({

@@ -21,7 +21,7 @@ const genres = require('./routes/genre');
 const home = require('./routes/home');
 const customer = require('./routes/customer');
 const movies = require('./routes/movies');
-
+const rental = require('./routes/rental');
 // Template Engines
 vidly.set('view engine', 'pug');
 vidly.set('views', './views');
@@ -35,6 +35,7 @@ vidly.use(helmet());// Secures the app by applying HTTP headers
 vidly.use('/api/genres', genres);
 vidly.use('/api/customer', customer);
 vidly.use('/api/movies', movies);
+vidly.use('/api/rental', rental);
 vidly.use('/', home);
 // vidly.use(logger);
 

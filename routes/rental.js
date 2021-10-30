@@ -1,45 +1,28 @@
+const {Rental, validate} = require('../models/rental');
+const {Movies} = require('../models/movies');
+const {Customer} = require('../models/customer');
 const mongoose = require('mongoose');
-const rentalLog = require('debug');
-const {rentalSchema, Rental, validate} = require('../models/rental');
 const express = require('express');
-const {request, response} = require("express");
-const {Customer} = require("../models/customer");
-const {Movies} = require("../models/movies");
-const rentalRoute = express.Router();
-const Fawn = require('fawn');
+const router = express.Router();
 
-// Initialise fawn
-Fawn.init(mongoose);
-
-// Get List of all rentals
-rentalRoute.get('/', async (request, response)=>{
-   const rentals = await Rental.find().sort('-dateOut');
-   response.send(rentals);
+router.get('/', async (req, res) => {
+    const rentals = await Rental.find().sort('-dateOut');
+    res.send(rentals);
 });
 
-// Add Rental to the list
-rentalRoute.post('/', async (request, response)=>{
-    // validate the movie object sent in the body
-    const { error } = validate(request.body);
-    if(error){
-        return response.status(400).send(error.details[0].message);
-    }
+router.post('/', async (req, res) => {
+    const { error } = await validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-    // check if the customer with customerId exists
-    const customer = await Customer.findById(request.body.customerId);
-    if(!customer){
-        return response.status(400).send('Customer with given ID not found');
-    }
+    const customer = await Customer.findById(req.body.customerId);
+    if (!customer) return res.status(400).send('Invalid customer.');
 
-    const movie = await Movies.findById(request.body.movieId);
-    if(!movie){
-        return response.status(400).send('Invalid Movie');
-    }
-    if(movie.numberInStock === 0){
-        return response.status(400).send('Movie not available for rental at the moment');
-    }
+    const movie = await Movies.findById(req.body.movieId);
+    if (!movie) return res.status(400).send('Invalid movie.');
 
-    let rental = new Rental({
+    if (movie.numberInStock === 0) return res.status(400).send('Movie not in stock.');
+
+    let rental = await new Rental({
         customer: {
             _id: customer._id,
             name: customer.name,
@@ -49,18 +32,22 @@ rentalRoute.post('/', async (request, response)=>{
             _id: movie._id,
             title: movie.title,
             dailyRentalRate: movie.dailyRentalRate
-        },
+        }
     });
     rental = await rental.save();
+
     movie.numberInStock--;
     movie.save();
 
-    return response.send(movie);
+    res.send(rental);
 });
 
+router.get('/:id', async (req, res) => {
+    const rental = await Rental.findById(req.params.id);
 
+    if (!rental) return res.status(404).send('The rental with the given ID was not found.');
 
-// Update Rental
+    res.send(rental);
+});
 
-// Delete rental
-// but we will not give this route public
+module.exports = router;
