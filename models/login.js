@@ -37,7 +37,7 @@ const Login = mongoose.model('Login', loginSchema);
 
 async function validateUserLogin(userId){
     const schema = Joi.object({
-        userId: JoiObjectId.objectId().require()
+        userId: JoiObjectId().require()
     });
     return schema.validate(userId);
 }
