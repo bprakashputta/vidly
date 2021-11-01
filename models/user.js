@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 const {func} = require("joi");
+const jwt = require("jsonwebtoken");
+const config = require("config");
 JoiObjectId = require('joi-objectid')(Joi);
 
-const registerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         minlength: 5,
@@ -24,7 +26,12 @@ const registerSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model('User', registerSchema);
+userSchema.methods.generateAuthToken = function () {
+    const token = jwt.sign({_id: this._id}, config.valueOf().get("jwtPrivateKey"));
+    return token;
+}
+
+const User = mongoose.model('User', userSchema);
 
 async function validateRegistrationDetails(user){
     const schema = Joi.object({
@@ -35,6 +42,6 @@ async function validateRegistrationDetails(user){
     return schema.validate(user);
 }
 
-module.exports.userSchema = registerSchema;
+module.exports.userSchema = userSchema;
 module.exports.validate = validateRegistrationDetails;
 module.exports.User = User;
