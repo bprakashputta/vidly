@@ -1,6 +1,8 @@
+// JOI Object validation check passed
 const Joi = require('joi');
 JoiObjectId = require('joi-objectid')(Joi);
 const mongoose = require('mongoose');
+
 
 const Rental = mongoose.model('Rental', new mongoose.Schema({
     customer: {
