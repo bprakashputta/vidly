@@ -25,11 +25,10 @@ movieRouter.get('/:id',async (request, response)=>{
 
 // Add Movie to Database
 movieRouter.post('/', async (request, response)=>{
-    const validateMovie = await validate(request.body);
-    if(!validateMovie){
-        return response.status(400).send("Invalid Movie Object Passed: "+ validateMovie.error.details[0].message);
+    const {error} =await validate(request.body);
+    if(error){
+        return response.status(400).send(error.details[0].message);
     }
-
     const genre = await Genre.findById(request.body.genreId);
     if(!genre){
         return response.status(400).send('Genre is Invalid, please update genre');

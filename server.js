@@ -24,6 +24,7 @@ const home = require('./routes/home');
 const customer = require('./routes/customer');
 const movies = require('./routes/movies');
 const rental = require('./routes/rental');
+const users = require('./routes/users');
 // Template Engines
 vidly.set('view engine', 'pug');
 vidly.set('views', './views');
@@ -38,6 +39,7 @@ vidly.use('/api/genres', genres);
 vidly.use('/api/customer', customer);
 vidly.use('/api/movies', movies);
 vidly.use('/api/rental', rental);
+vidly.use('/api/users', users);
 vidly.use('/', home);
 // vidly.use(logger);
 

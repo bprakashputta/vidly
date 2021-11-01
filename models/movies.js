@@ -10,7 +10,8 @@ const movieSchema = new mongoose.Schema({
         required: true,
         trim: true,
         minlength: 1,
-        maxlength: 255
+        maxlength: 255,
+        unique: true
     },
     genre: {
         type: genreSchema,
