@@ -5,6 +5,7 @@ const {request, response} = require("express");
 const Joi = require('joi');
 const customerRouter = express.Router();
 const {Customer, validate} = require('../models/customer');
+const auth = require("../middleware/auth");
 
 // Get list of All Customers
 customerRouter.get('', async (request, response)=>{
@@ -25,7 +26,7 @@ customerRouter.get('/:id', async (request, response) => {
 
 
 // Add new Customer to the database
-customerRouter.post('/', async (request, response)=>{
+customerRouter.post('/', auth, async (request, response)=>{
   // Step 1
   // Validate the Customer Schema passed in request body
   const validateRequest = await validate(request.body);
@@ -52,7 +53,7 @@ customerRouter.post('/', async (request, response)=>{
 
 
 // Update customer details by id
-customerRouter.put('/:id', async (request, response)=>{
+customerRouter.put('/:id', auth, async (request, response)=>{
   // Step 1
   // Validate the Customer Schema passed in request body
   const validateRequest = await validate(request.body);
@@ -79,7 +80,7 @@ customerRouter.put('/:id', async (request, response)=>{
 
 
 // Delete customer details by id
-customerRouter.delete('/:id', async (request, response)=>{
+customerRouter.delete('/:id', auth, async (request, response)=>{
   // Step 1
   let customer;
   try {

@@ -6,10 +6,11 @@ const Joi = require("joi");
 const userRouter = express.Router();
 const {User} =require('../models/user');
 const config = require('config');
+const auth = require('../middleware/auth');
 
 
 // POST METHOD to login users
-userRouter.post('/',async (request, response)=>{
+userRouter.post('/', async (request, response)=>{
     const {error} = await validate(request.body);
     if(error){
         return response.status(400).send(error.details[0].message);

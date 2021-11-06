@@ -6,6 +6,7 @@ const moviesLog = require('debug')('movies:log');
 const movieRouter = express.Router();
 const {Movies, validate, movieSchema} = require('../models/movies');
 const {Genre} = require("../models/genres");
+const auth = require("../middleware/auth");
 
 
 
@@ -24,7 +25,7 @@ movieRouter.get('/:id',async (request, response)=>{
 });
 
 // Add Movie to Database
-movieRouter.post('/', async (request, response)=>{
+movieRouter.post('/', auth, async (request, response)=>{
     const {error} =await validate(request.body);
     if(error){
         return response.status(400).send(error.details[0].message);
@@ -51,7 +52,7 @@ movieRouter.post('/', async (request, response)=>{
 
 // Update Movie in Database
 // But it's highly unlikely that we'll update a movie that's already existing
-movieRouter.put('/:id', async (request, response)=>{
+movieRouter.put('/:id', auth, async (request, response)=>{
     const {error} =await validate(request.body);
     if(error){
         return response.status(400).send(error.details[0].message);
@@ -81,7 +82,7 @@ movieRouter.put('/:id', async (request, response)=>{
 
 
 // Delete Movie from Database
-movieRouter.delete('/:id', async (request, response)=>{
+movieRouter.delete('/:id', auth, async (request, response)=>{
    const movie = await Movies.findByIdAndRemove(request.params.id);
    if(!movie){
        return response.status(400).send('Movie with given ID does not exist');

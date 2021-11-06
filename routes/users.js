@@ -6,12 +6,18 @@ const userRouter = express.Router();
 const {User, validate} =require('../models/user');
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const auth = require('../middleware/auth');
+const {request, response} = require("express");
 
 
+// GET METHOD to get current user
+userRouter.get('/me', auth, async (request, response)=>{
+    const user = await User.findById(request.body._id).select('-password');
+    return response.send(user);
+})
 
-
-// GET METHOD to register users
-userRouter.post('/',async (request, response)=>{
+// POST METHOD to register users
+userRouter.post('/', auth, async (request, response)=>{
     const {error} =await validate(request.body);
     if(error){
         return response.status(400).send(error.details[0].message);

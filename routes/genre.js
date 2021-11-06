@@ -3,6 +3,7 @@ const express = require('express');
 const Joi = require("joi");
 const genreRouter = express.Router();
 const {Genre, validate} = require('../models/genres');
+const auth = require("../middleware/auth");
 
 // const genres = [
 //     {
@@ -47,7 +48,7 @@ genreRouter.get('/:id', async (request, response)=>{
 });
 
 // POST METHOD to INSET new genre into genres
-genreRouter.post('/', async (request, response)=>{
+genreRouter.post('/', auth, async (request, response)=>{
     // This method will try to insert new genre object
     // into the list / database
 
@@ -71,7 +72,7 @@ genreRouter.post('/', async (request, response)=>{
 
 
 // PUT METHOD to UPDATE genre object in genres
-genreRouter.put('/:id', async (request, response)=>{
+genreRouter.put('/:id', auth, async (request, response)=>{
     // Step 1
     // Check if the schema object is valid
     // Has all the required parameters
@@ -96,7 +97,7 @@ genreRouter.put('/:id', async (request, response)=>{
 });
 
 // DELETE METHOD to DELETE genre object from genres
-genreRouter.delete('/:id', async (request, response)=>{
+genreRouter.delete('/:id', auth, async (request, response)=>{
     // Step 1
     // Check if the genre object with given ID exists
     const genre = await Genre.findByIdAndRemove(request.params.id);
