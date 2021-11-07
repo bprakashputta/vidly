@@ -4,6 +4,7 @@ const Joi = require("joi");
 const genreRouter = express.Router();
 const {Genre, validate} = require('../models/genres');
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 
 // const genres = [
 //     {
@@ -22,7 +23,6 @@ const auth = require("../middleware/auth");
 
 // Implementing the CRUD operations for
 // genre of Movies on the Vidly Service
-
 
 
 
@@ -97,7 +97,7 @@ genreRouter.put('/:id', auth, async (request, response)=>{
 });
 
 // DELETE METHOD to DELETE genre object from genres
-genreRouter.delete('/:id', auth, async (request, response)=>{
+genreRouter.delete('/:id', [auth, admin], async (request, response)=>{
     // Step 1
     // Check if the genre object with given ID exists
     const genre = await Genre.findByIdAndRemove(request.params.id);
