@@ -31,6 +31,7 @@ const movies = require('./routes/movies');
 const rental = require('./routes/rental');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const error = require("./middleware/error");
 // Template Engines
 vidly.set('view engine', 'pug');
 vidly.set('views', './views');
@@ -48,6 +49,7 @@ vidly.use('/api/rental', rental);
 vidly.use('/api/users', users);
 vidly.use('/api/auth', auth);
 vidly.use('/', home);
+vidly.use(error);
 // vidly.use(logger);
 
 

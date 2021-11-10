@@ -5,6 +5,7 @@ const genreRouter = express.Router();
 const {Genre, validate} = require('../models/genres');
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
+const asyncMiddleware = require("../middleware/async");
 
 // const genres = [
 //     {
@@ -27,10 +28,17 @@ const admin = require("../middleware/admin");
 
 
 // GET METHOD to READ list of genres
-genreRouter.get('/',async (request, response)=>{
-    const genres = await Genre.find().sort('name');
-    console.log(genres);
-    response.send(genres);
+genreRouter.get('/',async (request, response,next)=>{
+    // throw new Error("Couldn't get genres");
+    try{
+    //     throw new Error("Couldn't get genres");
+        const genres = await Genre.find().sort('name');
+        console.log(genres);
+        return response.send(genres);
+    }catch (ex){
+        // return response.status(500).send("Something failed");
+        next(ex);
+    }
 });
 
 // GET METHOD for reading particular genres
